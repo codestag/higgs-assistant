@@ -123,7 +123,7 @@ function higgs_assistant_activation_check() {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			add_action( 'after_setup_theme', 'higgs_assistant' );
 		} else {
-			ink_assistant();
+			higgs_assistant();
 		}
 	} else {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
@@ -131,5 +131,5 @@ function higgs_assistant_activation_check() {
 	}
 }
 
-// Theme loads.
+// Plugin loads.
 higgs_assistant_activation_check();

@@ -1,5 +1,5 @@
 # Higgs Assistant
-A plugin to assit Higgs theme in adding widgets.
+A plugin to assist Higgs theme in adding widgets.
 
 ### To use this follow the below steps
  1. Make sure you have [Higgs Theme](https://codestag.com/themes/higgs) installed and then clone or download this repo.
