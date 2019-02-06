@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Higgs Assistant
  * Plugin URI: https://github.com/Codestag/higgs-assistant
- * Description: A plugin to assit Higgs theme in adding widgets.
+ * Description: A plugin to assist Higgs theme in adding widgets.
  * Author: Codestag
  * Author URI: https://codestag.com
  * Version: 1.0
@@ -81,7 +81,6 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		 * @since 1.0
 		 */
 		public function includes() {
-			require_once HA_PLUGIN_PATH . 'includes/widgets/section-category-boxes.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/portfolio.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/recent-posts.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/service-option.php';
