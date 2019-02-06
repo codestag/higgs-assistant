@@ -99,7 +99,7 @@ endif;
  *
  * @since 1.0
  */
-function atik_assistant() {
+function higgs_assistant() {
 	return Higgs_Assistant::register();
 }
 
@@ -107,7 +107,7 @@ function atik_assistant() {
  *
  * @since 1.0
  */
-function atik_assistant_activation_notice() {
+function higgs_assistant_activation_notice() {
 	echo '<div class="error"><p>';
 	echo esc_html__( 'Higgs Assistant requires Higgs WordPress Theme to be installed and activated.', 'higgs-assistant' );
 	echo '</p></div>';
