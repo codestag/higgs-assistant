@@ -87,8 +87,6 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 			require_once HA_PLUGIN_PATH . 'includes/widgets/service-section.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/static-content.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/testimonials.php';
-
-			require_once HA_PLUGIN_PATH . 'includes/updater/updater.php';
 		}
 	}
 endif;
