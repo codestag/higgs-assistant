@@ -39,18 +39,9 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		public static function register() {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Higgs_Assistant ) ) {
 				self::$instance = new Higgs_Assistant();
-				self::$instance->init();
 				self::$instance->define_constants();
 				self::$instance->includes();
 			}
-		}
-
-		/**
-		 *
-		 * @since 1.0
-		 */
-		public function init() {
-			add_action( 'enqueue_assets', 'plugin_assets' );
 		}
 
 		/**
@@ -81,6 +72,7 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		 * @since 1.0
 		 */
 		public function includes() {
+			require_once HA_PLUGIN_PATH . 'includes/widgets/stag-widget.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/portfolio.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/recent-posts.php';
 			require_once HA_PLUGIN_PATH . 'includes/widgets/service-option.php';
@@ -116,14 +108,17 @@ function higgs_assistant_activation_notice() {
  * @since 1.0
  */
 function higgs_assistant_activation_check() {
-	$theme = wp_get_theme(); // gets the current theme
-	if ( 'Higgs' == $theme->name || 'Higgs' == $theme->parent_theme ) {
+	$theme = wp_get_theme(); // gets the current theme.
+	if ( 'Higgs' === $theme->name || 'Higgs' === $theme->parent_theme ) {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			add_action( 'after_setup_theme', 'higgs_assistant' );
 		} else {
 			higgs_assistant();
 		}
 	} else {
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		add_action( 'admin_notices', 'higgs_assistant_activation_notice' );
 	}
