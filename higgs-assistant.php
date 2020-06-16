@@ -13,7 +13,6 @@
  * @package Higgs
  */
 
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,18 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Higgs_Assistant' ) ) :
 	/**
+	 * Higgs Assistant Class
 	 *
 	 * @since 1.0
 	 */
 	class Higgs_Assistant {
 
 		/**
+		 * Instance var.
 		 *
 		 * @since 1.0
 		 */
 		private static $instance;
 
 		/**
+		 * Register instance for plugin class.
 		 *
 		 * @since 1.0
 		 */
@@ -45,6 +47,7 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		}
 
 		/**
+		 * Defined constants.
 		 *
 		 * @since 1.0
 		 */
@@ -56,6 +59,7 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		}
 
 		/**
+		 * Defines a constant.
 		 *
 		 * @param string $name
 		 * @param string $value
@@ -68,6 +72,7 @@ if ( ! class_exists( 'Higgs_Assistant' ) ) :
 		}
 
 		/**
+		 * Includes plugin files.
 		 *
 		 * @since 1.0
 		 */
@@ -85,6 +90,7 @@ endif;
 
 
 /**
+ * Plugin class instance.
  *
  * @since 1.0
  */
@@ -93,6 +99,7 @@ function higgs_assistant() {
 }
 
 /**
+ * Plugin activation alert.
  *
  * @since 1.0
  */
@@ -103,18 +110,14 @@ function higgs_assistant_activation_notice() {
 }
 
 /**
- *
+ * Plugin activation check.
  *
  * @since 1.0
  */
 function higgs_assistant_activation_check() {
 	$theme = wp_get_theme(); // gets the current theme.
 	if ( 'Higgs' === $theme->name || 'Higgs' === $theme->parent_theme ) {
-		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-			add_action( 'after_setup_theme', 'higgs_assistant' );
-		} else {
-			higgs_assistant();
-		}
+		add_action( 'after_setup_theme', 'higgs_assistant' );
 	} else {
 		if ( ! function_exists( 'deactivate_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
