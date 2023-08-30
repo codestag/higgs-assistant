@@ -60,16 +60,16 @@ class Higgs_Testimonials extends Stag_Widget {
 
 		$classes = 'higgs-testimonial-slider cycle-slideshow';
 
-		// Data attributes
-		$data_attributes  = ' data-cycle-log="false"';
-		$data_attributes .= ' data-cycle-slides=".cycle-slide"';
-		$data_attributes .= ' data-cycle-auto-height="calc"';
-		$data_attributes .= ' data-cycle-center-horz="true"';
-		$data_attributes .= ' data-cycle-center-vert="true"';
-		$data_attributes .= ' data-cycle-swipe="true"';
-		$data_attributes .= ' data-cycle-paused="true"';
-		$data_attributes .= ' data-cycle-timeout="6000"';
-		$data_attributes .= ' data-cycle-fx="fade"';
+			// Data attributes
+			$data_attributes  = ' data-cycle-log=false';
+			$data_attributes .= ' data-cycle-slides=.cycle-slide';
+			$data_attributes .= ' data-cycle-auto-height=calc';
+			$data_attributes .= ' data-cycle-center-horz=true';
+			$data_attributes .= ' data-cycle-center-vert=true';
+			$data_attributes .= ' data-cycle-swipe=true';
+			$data_attributes .= ' data-cycle-paused=true';
+			$data_attributes .= ' data-cycle-timeout=6000';
+			$data_attributes .= ' data-cycle-fx=fade';
 
 		if ( $t->have_posts() ) : ?>
 			<div class="<?php echo esc_attr( $classes ); ?>"<?php echo esc_attr( $data_attributes ); ?>>
