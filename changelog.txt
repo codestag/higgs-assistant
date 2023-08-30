@@ -1,4 +1,9 @@
 ### Higgs Assistant Changelog
 
+## 1.0.1 - August 30, 2023
+* Fix Testimonials widget
+* Fix escaping and conditional checks
+* Other minor improvements
+
 ## 1.0.0 - June 16, 2020
 * Initial release

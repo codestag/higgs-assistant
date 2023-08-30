@@ -38,11 +38,12 @@ class Stag_Widget extends WP_Widget {
 	function get_cached_widget( $args ) {
 		$cache = wp_cache_get( $this->widget_id, 'widget' );
 
-		if ( ! is_array( $cache ) )
+		if ( ! is_array( $cache ) ) {
 			$cache = array();
+		}
 
-		if ( isset( $cache[ $args[ 'widget_id' ] ] ) ) {
-			echo $cache[ $args[ 'widget_id' ] ];
+		if ( isset( $cache[ $args['widget_id'] ] ) ) {
+			echo $cache[ $args['widget_id'] ];
 			return true;
 		}
 
@@ -55,7 +56,7 @@ class Stag_Widget extends WP_Widget {
 	 * @return void
 	 */
 	public function cache_widget( $args, $content ) {
-		$cache[ $args[ 'widget_id' ] ] = $content;
+		$cache[ $args['widget_id'] ] = $content;
 
 		wp_cache_set( $this->widget_id, $cache, 'widget' );
 	}
@@ -81,23 +82,25 @@ class Stag_Widget extends WP_Widget {
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 
-		if ( ! $this->settings )
+		if ( ! $this->settings ) {
 			return $instance;
+		}
 
 		foreach ( $this->settings as $key => $setting ) {
-			switch ( $setting[ 'type' ] ) {
-				case 'textarea' :
-					if ( current_user_can( 'unfiltered_html' ) )
-						$instance[ $key ] = $new_instance[ $key ];
-					else
-						$instance[ $key ] = wp_kses_data( $new_instance[ $key ] );
-				break;
-				case 'number' :
-					$instance[ $key ] = absint( $new_instance[ $key ] );
-				break;
-				default :
-					$instance[ $key ] = sanitize_text_field( $new_instance[ $key ] );
-				break;
+			switch ( $setting['type'] ) {
+				case 'textarea':
+					if ( current_user_can( 'unfiltered_html' ) ) {
+						$instance[ $key ] = isset( $new_instance[ $key ] ) ? $new_instance[ $key ] : '';
+					} else {
+						$instance[ $key ] = isset( $new_instance[ $key ] ) ? wp_kses_data( $new_instance[ $key ] ) : '';
+					}
+					break;
+				case 'number':
+					$instance[ $key ] = isset( $new_instance[ $key ] ) ? absint( $new_instance[ $key ] ) : '';
+					break;
+				default:
+					$instance[ $key ] = isset( $new_instance[ $key ] ) ? sanitize_text_field( $new_instance[ $key ] ) : '';
+					break;
 			}
 		}
 
@@ -116,58 +119,59 @@ class Stag_Widget extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		if ( ! $this->settings )
+		if ( ! $this->settings ) {
 			return;
+		}
 
 		foreach ( $this->settings as $key => $setting ) {
-			$value = isset( $instance[ $key ] ) ? $instance[ $key ] : $setting[ 'std' ];
+			$value = isset( $instance[ $key ] ) ? $instance[ $key ] : $setting['std'];
 
-			switch ( $setting[ 'type' ] ) {
-				case 'description' :
+			switch ( $setting['type'] ) {
+				case 'description':
 					?>
 					<p class="description"><?php echo esc_html( $setting['std'] ); ?></p>
 					<?php
-				break;
+					break;
 
-				case 'text' :
+				case 'text':
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
 						<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" type="text" value="<?php echo esc_attr( $value ); ?>" />
 					</p>
 					<?php
-				break;
+					break;
 
-				case 'checkbox' :
+				case 'checkbox':
 					?>
 					<p>
 						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>">
 							<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" type="text" value="1" <?php checked( 1, esc_attr( $value ) ); ?>/>
-							<?php echo esc_html( $setting[ 'label' ] ); ?>
+							<?php echo esc_html( $setting['label'] ); ?>
 						</label>
 					</p>
 					<?php
-				break;
+					break;
 
-				case 'select' :
+				case 'select':
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
 						<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>">
-							<?php foreach ( $setting[ 'options' ] as $key => $label ) : ?>
+							<?php foreach ( $setting['options'] as $key => $label ) : ?>
 							<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $value ); ?>><?php echo esc_attr( $label ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</p>
 					<?php
-				break;
+					break;
 
 				case 'page':
 					$exclude_ids = implode( ',', array( get_option( 'page_for_posts' ), get_option( 'page_on_front' ) ) );
-					$pages       = get_pages( 'sort_order=ASC&sort_column=post_title&post_status=publish&exclude='. $exclude_ids );
+					$pages       = get_pages( 'sort_order=ASC&sort_column=post_title&post_status=publish&exclude=' . $exclude_ids );
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
 						<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>">
 							<?php foreach ( $pages as $page ) : ?>
 								<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $page->ID, $value ); ?>><?php echo esc_attr( $page->post_title ); ?></option>
@@ -175,54 +179,62 @@ class Stag_Widget extends WP_Widget {
 						</select>
 					</p>
 					<?php
-				break;
+					break;
 
 				case 'categories':
 					$args = array( 'hide_empty' => 0 );
 
-					if ( isset( $setting['taxonomy'] ) ) $args['taxonomy'] = $setting['taxonomy'];
+					if ( isset( $setting['taxonomy'] ) ) {
+						$args['taxonomy'] = $setting['taxonomy'];
+					}
 
 					$categories = get_categories( $args );
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
 						<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>">
-							<option value="0"><?php _e( 'All', 'higgs' ); ?></option>
+							<option value="0"><?php esc_html_e( 'All', 'higgs' ); ?></option>
 							<?php foreach ( $categories as $cat ) : ?>
 								<option value="<?php echo esc_attr( $cat->term_id ); ?>" <?php selected( $cat->term_id, $value ); ?>><?php echo esc_attr( $cat->name ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</p>
 					<?php
-				break;
+					break;
 
-				case 'number' :
-					if ( ! isset( $setting['step'] ) ) $setting['step'] = '1';
-					if ( ! isset( $setting['min'] ) ) $setting['min'] = '1';
-					if ( ! isset( $setting['max'] ) ) $setting['max'] = '100';
+				case 'number':
+					if ( ! isset( $setting['step'] ) ) {
+						$setting['step'] = '1';
+					}
+					if ( ! isset( $setting['min'] ) ) {
+						$setting['min'] = '1';
+					}
+					if ( ! isset( $setting['max'] ) ) {
+						$setting['max'] = '100';
+					}
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
-						<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" type="number" step="<?php echo esc_attr( $setting[ 'step' ] ); ?>" min="<?php echo esc_attr( $setting[ 'min' ] ); ?>" max="<?php echo esc_attr( $setting[ 'max' ] ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
+						<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" type="number" step="<?php echo esc_attr( $setting['step'] ); ?>" min="<?php echo esc_attr( $setting['min'] ); ?>" max="<?php echo esc_attr( $setting['max'] ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 					</p>
 					<?php
-				break;
+					break;
 
-				case 'textarea' :
+				case 'textarea':
 					?>
 					<p>
-						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
-						<textarea class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" rows="<?php echo esc_attr( $setting[ 'rows' ] ); ?>"><?php echo esc_html( $value ); ?></textarea>
+						<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
+						<textarea class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" rows="<?php echo esc_attr( $setting['rows'] ); ?>"><?php echo esc_html( $value ); ?></textarea>
 					</p>
 					<?php
-				break;
+					break;
 
-				case 'colorpicker' :
+				case 'colorpicker':
 						wp_enqueue_script( 'wp-color-picker' );
 						wp_enqueue_style( 'wp-color-picker' );
 					?>
 						<p style="margin-bottom: 0;">
-							<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting[ 'label' ] ); ?></label>
+							<label for="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>"><?php echo esc_html( $setting['label'] ); ?></label>
 						</p>
 						<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( $key ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $key ) ); ?>" data-default-color="<?php echo esc_attr( $setting['std'] ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 						<script>
@@ -232,7 +244,7 @@ class Stag_Widget extends WP_Widget {
 						</script>
 						<p></p>
 					<?php
-				break;
+					break;
 			}
 		}
 	}
